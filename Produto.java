@@ -1,5 +1,5 @@
 package SGE;
-// classe produto
+// definindo atributos
 public class Produto {
 String nome;
 String categoria;
