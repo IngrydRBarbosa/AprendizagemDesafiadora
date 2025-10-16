@@ -18,7 +18,7 @@ public class GerencEstoque {
         System.out.print("Digite o nome do novo produto: ");
         nome = leia.next();
         System.out.print("Digite a categoria: ");
-        categoria = leia.nextLine();
+        categoria = leia.next();
         System.out.print("Digite o valor: ");
         valor = leia.nextDouble();
         System.out.print("Digite o código do novo produto: ");
@@ -49,6 +49,66 @@ public class GerencEstoque {
     System.out.printf("Categoria: \t\t%s\n", produto.categoria);
     System.out.printf("Valor: \t\t\tR$%.2f\n", produto.valor);
     System.out.printf("Qtd. em Estoque: \t%d\n\n", produto.qtdEstoque);
+    }
+
+    // SUBMENU PARA MODIFICAR QUANTIDADE DO ESTOQUE
+    public static void menuAcoesProdutoEncontrado(Scanner leia, Produto produto) {
+        int opcaoSubMenu;
+
+        do {
+            
+            System.out.println("\nO que deseja fazer com esse produto?");
+            System.out.println("1. Modificar estoque");
+            System.out.println("2. Retornar ao menu principal");
+            System.out.print("Escolha uma opção: ");
+            opcaoSubMenu = leia.nextInt();
+    
+            switch (opcaoSubMenu) {
+                case 1:
+                    modificarEstoque(leia, produto);
+                    break;
+                case 2:
+                    System.out.println("Retornando ao menu principal...");
+                    break;
+                default:
+                    System.out.println("Opção inválida. Tente novamente");
+                    break;
+            }
+        } while (opcaoSubMenu != 2);
+    }
+
+    // ACRESCENTA OU REMOVE QUANTIDADE EM ESTOQUE APÓS BUSCAR CÓDIGO DO PRODUTO
+    public static void modificarEstoque(Scanner leia, Produto produto) {
+        int escolha, quantidade;
+
+        System.out.println("\n ---- MODIFICAR ESTOQUE DE:  " + produto.nome + " ----");
+        System.out.printf("Estoque atual: %d\n", produto.qtdEstoque);
+
+        System.out.println("1. Adicionar (entrada)");
+        System.out.println("2. Remover (saída/dar baixa)");
+        System.out.print("Escolha a opção: ");
+        escolha = leia.nextInt();
+
+        if(escolha != 1 && escolha != 2) {
+            System.out.println("ERRO! Número inválido\n");
+            return;
+        }
+
+        System.out.print("Digite a quantidade: ");
+        quantidade = leia.nextInt();
+
+        if(escolha == 1) { // entrada
+            produto.qtdEstoque += quantidade;
+            System.out.printf("Adicionado +%d com sucesso! Quantidade atual em estoque: %d", quantidade, produto.qtdEstoque);
+        } else { // saída
+            if(produto.qtdEstoque >= quantidade) {
+                produto.qtdEstoque -= quantidade;
+                System.out.printf("Removido -%d com sucesso! Quantidade atual em estoque: %d", quantidade, produto.qtdEstoque);
+            } else {
+                System.out.println("ERRO: valor maior do que quantidade em estoque. Disponível: \n" + produto.qtdEstoque);
+
+            }
+        }
     }
 
     // Exibe a lista completa dos produtos cadastrados em tabela
@@ -95,6 +155,7 @@ public class GerencEstoque {
                         System.out.println("Não há produto cadastrado com esse código.\n");
                     }else {
                         exibirProduto(busca); // método com as mensagens dos dados do produto encontrado
+                        menuAcoesProdutoEncontrado(leia, busca);
                     } 
                     break;
 
